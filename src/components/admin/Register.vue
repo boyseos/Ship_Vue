@@ -9,7 +9,7 @@
       @sendStadiumName="setStadium"
       mandatory></fut-map>
       <br>
-      <h6 style="color:orange">아래 필드에 지역을 검색 후 위의 지도에서 해당 구장을 선택해주세요!</h6>
+      <h6 v-if="city==''" style="color:orange">아래 필드에 지역을 검색 후 위의 지도에서 해당 구장을 선택해주세요!</h6>
     <v-text-field :value="stadiumName" @keyup.enter="submit"></v-text-field>
 
           <v-text-field
@@ -82,10 +82,10 @@
 <label class="col-md-3 col-form-label" for="disabled-input">경기 예약  비용</label>
 <v-radio-group v-model="price" row :mandatory="true">
       <v-radio label="10000원" value="10000원"></v-radio>
-      <v-radio label="12000원" ></v-radio>
-      <v-radio label="15000원" ></v-radio>
-      <v-radio label="18000원" ></v-radio>
-      <v-radio label="20000원" ></v-radio>
+      <v-radio label="15000원" disabled></v-radio>
+      <v-radio label="20000원" disabled></v-radio>
+      <v-radio label="25000원" disabled></v-radio>
+      <v-radio label="30000원" disabled></v-radio>
     </v-radio-group>
 </v-card>
 </template>
@@ -280,7 +280,7 @@ export default {
         '6 vs 6',
       ],
       leng:'',
-      price:'',
+      price:'10000',
       remain:'',
       fnc: store.state.futsal.fnc,
       }
