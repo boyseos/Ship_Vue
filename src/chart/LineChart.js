@@ -1,28 +1,27 @@
-import { Line, mixins } from 'vue-chartjs'
+import { Line,mixins } from 'vue-chartjs'
 const { reactiveProp } = mixins
-
 export default {
   extends: Line,
   mixins: [reactiveProp],
-  data: () => ({
-    chartdata: {
-      labels: ['January', 'February'],
-      datasets: [
-        {
-          label: 'Data One',
-          backgroundColor: '#f87979',
-          data: [40, 20]
-        }
-      ]
-    },
+  data(){
+    return{
+    chartdata: {},
+    
     options: {
+      
       responsive: true,
-      maintainAspectRatio: false
+      maintainAspectRatio: true,
+      legend: {
+        labels: {
+            fontColor: 'black',
+            
+        },
+      },
+      
     }
-  }),
+  }
+},
   mounted () {
-    // this.chartData is created in the mixin.
-    // If you want to pass options please create a local options object
     this.renderChart(this.chartdata, this.options)
   }
 }

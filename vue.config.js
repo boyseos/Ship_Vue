@@ -1,8 +1,9 @@
 module.exports = {
-  "outputDir": "../src/main/resources/static",
-  "indexPath": "../static/index.html",
+  "outputDir": "../static",
+  "indexPath": "./index.html",
   "devServer": {
-    "proxy": "http://15.165.26.82"
+    "proxy": "http://kapi.kakao.com"
+    //"proxy": "http://15.165.26.82"
   },
   "transpileDependencies": [
     "vuetify"

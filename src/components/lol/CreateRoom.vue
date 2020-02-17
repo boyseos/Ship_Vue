@@ -14,75 +14,69 @@
             <v-col center sm="1" md="6">
              <v-radio-group v-model="row" row>
         <v-radio label="개인/2인랭크게임" value="rank" ></v-radio>
-        <v-radio label="칼바람(준비중 )" ></v-radio>
-        <v-radio label="URF(준비중 )" ></v-radio>
-        <v-radio label="롤토체스(준비중 )" ></v-radio>
-        <!-- <v-radio label="칼바람나락" value="kal"></v-radio> -->
+        <v-radio disabled label="칼바람(준비중 )" @click="prepare()"></v-radio>
+        <v-radio disabled label="URF(준비중 )" @click="prepare()"></v-radio>
+        <v-radio disabled label="롤토체스(준비중 )" @click="prepare()"></v-radio>
+      </v-radio-group>
+      <v-divider></v-divider>
+      <v-radio-group v-model="position" row>
+        <v-radio label="탑" value="top" ></v-radio>
+        <v-radio label="정글" value="jungle"></v-radio>
+        <v-radio label="미드" value="mid"></v-radio>
+        <v-radio label="원딜" value="bot"></v-radio>
+        <v-radio label="서포터" value="supporter"></v-radio>
       </v-radio-group>
       <v-divider></v-divider>
               <v-radio-group v-model="tier" column>
               <v-radio
                   label="아이언"
                   color="#6D4C41"
-                  value="iron"
+                  value="Iron"
                 ></v-radio>
                 <v-radio
                   label="브론즈"
                   color="#6D4C41"
-                  value="bronze"
+                  value="Bronze"
                 ></v-radio>
                 <v-radio
                   label="실버"
                   color="#CFD8DC"
-                  value="silver"
+                  value="Silver"
                 ></v-radio>
                 <v-radio
                   label="골드"
                   color="#FF9800"
-                  value="gold"
+                  value="Gold"
                 ></v-radio>
                 <v-radio
                   label="플레티넘"
                   color="#00796B"
-                  value="platinum"
+                  value="Platinum"
                 ></v-radio>
                 <v-radio
                   label="다이아"
                   color="#0288D1"
-                  value="diamond"
+                  value="Diamond"
                 ></v-radio>
                 <v-radio
                   label="마스터"
                   color="#4DB6AC"
-                  value="master"
+                  value="Master"
                 ></v-radio>
                 <v-radio
                   label="그랜드 마스터"
                   color="#4DB6AC"
-                  value="grande master"
+                  value="Grandmaster"
                 ></v-radio>
                 <v-radio
                   label="챌린져"
                   color="#AFB42B"
-                  value="challenger"
-                ></v-radio>
-                
-              </v-radio-group>
-              
+                  value="Challenger"
+                ></v-radio>    
+              </v-radio-group>       
             </v-col>
         </v-container>
       </v-card-text>
-      <!-- <textarea v-model="contents" outlined="outlined" placeholder="컨텐츠 내용 입력" background-color="grey lighten-2" id="comment" name="a1670651c2" cols="130" rows="6" maxlength="65525" aria-required="true" required="required"></textarea> -->
-      <!-- <v-textarea
-      background-color="grey lighten-2"
-      filled
-      placeholder="내용을 입력해주세요"
-      color="black"
-      outlined
-      auto-grow
-      row-height="30"
-      style="width:800px;height:400px;color:black"
-    ></v-textarea> -->
     <v-textarea
           v-model="contents"
           outlined
@@ -107,12 +101,14 @@ import {store} from '@/store'
 export default{
   data(){
     return{
+      context:store.state.context,
+      position:'',
       row:'rank',
       tier: '',
       title: '',
       contents: '',
       state : store.state,
-      temp : '',
+      temp : "",
       result : {},
       crawltier:'',
       crawlrate:'',
@@ -121,11 +117,17 @@ export default{
     }
   },
   methods:{
+    prepare(){
+      alert('준비중입니다.')
+    },
     lol(){
       this.$router.push({path:'/lol'})
     },
     crawling(){
-    let url = `/lol/summoner/userName=${this.state.person.summonername}`
+      if(this.state.person.userid == null){
+        alert('로그인해야 이용 하실 수 있습니다.')
+      }else{
+        let url = `${this.context}/lol/summoner/userName=${this.state.person.summonername}`
     axios
     .get(url)
     .then(res=>{
@@ -133,15 +135,18 @@ export default{
       this.crawltier = this.temp.tier
       this.crawlrate = this.temp.rate
       this.img = this.temp.photo
+      if(this.temp == ''){
+        alert('opgg에 등록된 정보가 없습니다.')
+      }
       this.createroom()
     })
-    .catch(e=>{
-      alert('axios fail'+e)
-    })
+      }
     },
     createroom(){
-      // this.crawling()
-      let url = `/lol/createroom`
+      if(this.title == "" || this.tier == "" || this.contents == "" || this.position == ""){
+        alert('모든 정보를 입력해주세요')
+      }else{
+        let url = `${this.context}/lol/createroom`
            let headers = {
               'authorization': 'JWT fefege..',
                 'Accept' : 'application/json',
@@ -156,18 +161,16 @@ export default{
               crawltier : this.crawltier,
               crawlrate : this.crawlrate,
               img : this.img,
-              wtime : this.wtime
+              wtime : this.wtime,
+              position : this.position
            }
            axios
            .post(url, data, headers)
            .then(res =>{
               this.result = res.data
-              // alert('방생성 완료!')
               this.$router.push({path:`/lol`})
            })
-           .catch(e=>{
-              alert('AXIOS FAIL'+e)
-           })
+      }   
     }
   }
 }

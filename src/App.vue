@@ -1,18 +1,22 @@
 <template>
-<home></home>
+<div>
+  <component :is="$store.state.mainView"></component>
+</div>
 </template>
-
 <script>
-import Home from './components/Home.vue';
-//a1
+import Home from '@/components/Home.vue'
+import Intro from '@/components/Intro.vue'
 export default {
-  name: 'App',
-
   components: {
-    Home,
+    Home,Intro
   },
-
-  data: () => ({
-  }),
-};
+  data(){
+    return {
+    }
+  },
+  methods:{
+  }
+}
 </script>
+<style scoped>
+</style>

@@ -7,24 +7,26 @@ export default {
   data(){
     return {
       chartdata:{
-         datasets: [{
-          data: []
-        }],
-        labels: [
-        'Red',
-        'Yellow',
-        'Blue'
-        ]
+
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        legend: {
+          labels: {
+              fontColor: 'black',
+              
+          },
+        },
+        borderWidth: "10px",
+      hoverBackgroundColor: "red",
+      hoverBorderWidth: "10px"
       }
     }
   },
   mounted() {
     // this.chartData is created in the mixin.
     // If you want to pass options please create a local options object
-    this.renderChart(this.data, {
-      borderWidth: "10px",
-      hoverBackgroundColor: "red",
-      hoverBorderWidth: "10px"
-    });
+    this.renderChart(this.data, this.options);
   }
 };

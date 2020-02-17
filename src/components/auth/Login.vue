@@ -1,23 +1,19 @@
 <template>
 <div id="app" >
-  <v-btn color="indigo darken-1" dark fixed center @click="dialog = !dialog"  style="font-size:15px" > login </v-btn>
+  <v-btn color="blue darken-2" dark fixed center @click="dialog = !dialog"  style="font-size:15px" > 로그인 </v-btn>
     <v-dialog v-model="dialog" width="400px" >
       <v-card >
-        <v-card-title class="indigo " font-color="white" > LOGIN </v-card-title>
+        <v-card-title class="indigo " font-color="white" > 로그인 </v-card-title>
         <v-container fluid  >
           <v-layout wrap  >
             <v-flex xs8  >
               <v-text-field center prepend-icon="people" v-model="userid" label="ID" required></v-text-field>
               <v-text-field prepend-icon="lock" label="PASSWORD" type="password" v-model="passwd"></v-text-field>
-              <v-checkbox v-model="checkbox" label="로그인 유지" ></v-checkbox>
-              <v-btn v-for="icon of icons" :key="icon" class="mx-4 white--text" icon @click="socialgo()">
-                <v-icon size="24px">{{ icon }}</v-icon>
-              </v-btn>
-            </v-flex>
-            
+              <v-checkbox v-model="checkbox" label="로그인 유지">
+              </v-checkbox>
+            </v-flex> 
           </v-layout>
         </v-container>
-
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text color="primary" @click="login()">LOGIN</v-btn>
@@ -42,6 +38,7 @@ export default {
         userid : '',
         passwd : '',
         person : '',
+        context: store.state.context,
         state : store.state,
         icons: [
                 'mdi-facebook-box',
@@ -52,7 +49,7 @@ export default {
     },
    methods:{
       login(){
-        let url = `/login`
+        let url = `${this.context}/login`
         let data =  {
          userid : this.userid,
          passwd : this.passwd
@@ -67,10 +64,13 @@ export default {
       .then(res=>{
             if(res.data.result === "SUCCESS"){
                 store.state.person = res.data.person
-                if(this.state.person.role != 'student'){
-                    this.state.authCheck = true
-                }else{
-                    this.state.authCheck = false
+                this.state.authCheck = true
+                if(parseInt(this.$moment(this.state.person.blacktime).format('x')) < parseInt(Date.now())){
+                  this.deleteBlack()
+                }
+                window.sessionStorage.setItem('person',JSON.stringify(store.state.person))
+                if(this.checkbox){
+                  window.localStorage.setItem('person',JSON.stringify(store.state.person))
                 }
                 this.dialog=false
             }else{
@@ -79,10 +79,18 @@ export default {
             }
          this.result = res.data
       })
-      .catch(()=>{
-         alert('axios fail')
+      .catch(e=>{
+         alert('로그인 실패 error code=>'+e)
         })
+      },
+      deleteBlack(){
+      let url = `${this.context}/deleteBlack/${this.userid}`
+      let data = {
+        userid : this.userid
       }
+      axios
+      .put(url,data)
+    }
    }
 }
 </script>

@@ -6,23 +6,23 @@
     <div style="margin:3%;padding:3%">
     <fut-map :style="`height: 500px; width:100%;`"
       :propSearchWord="`${searchWord} 풋살 경기장`"
-      :propLocation="location"
       @sendStadiumName="setStadium"
       mandatory></fut-map>
+      <br>
+      <h6 v-if="city==''" style="color:orange">아래 필드에 지역을 검색 후 위의 지도에서 해당 구장을 선택해주세요!</h6>
     <v-text-field :value="stadiumName" @keyup.enter="submit"></v-text-field>
-
           <v-text-field
-            label="관리자 이름"
+            label="등록자 이름"
             outlined
             v-model="state.person.name"
           ></v-text-field>
           <v-text-field
-            label="관리자 연락처"
+            label="등록자 연락처"
             v-model="state.person.tel"
             outlined
           ></v-text-field>
           <v-text-field
-            label="관리자 이메일"
+            label="등록자 이메일"
             v-model="state.person.email"
             outlined
           ></v-text-field>
@@ -81,10 +81,10 @@
 <label class="col-md-3 col-form-label" for="disabled-input">경기 예약  비용</label>
 <v-radio-group v-model="price" row :mandatory="true">
       <v-radio label="10000원" value="10000원"></v-radio>
-      <v-radio label="12000원" ></v-radio>
-      <v-radio label="15000원" ></v-radio>
-      <v-radio label="18000원" ></v-radio>
-      <v-radio label="20000원" ></v-radio>
+      <v-radio label="15000원" disabled></v-radio>
+      <v-radio label="20000원" disabled></v-radio>
+      <v-radio label="25000원" disabled></v-radio>
+      <v-radio label="30000원" disabled></v-radio>
     </v-radio-group>
 </v-card>
 </template>
@@ -113,12 +113,13 @@
         ></v-textarea>
 </div>
 </v-card>
-<!-- -----------------------------------날짜 등록 ------------------------------------------- -->
-<div class="card-body" text-align="center" >
+
+<div text-align="center" style="margin:50px" >
     <h3 class="card-title" >등록 날짜 & 시간 연동</h3>
  <v-date-picker 
   margin:auto
   v-model="picker"
+  :allowed-dates="allowedDates"
   value
   left
   width="300"
@@ -128,8 +129,6 @@
   <v-btn text outlined color="primary" @click="changedate()" bold>---------해당 날짜 날씨 연동---------</v-btn>
   </v-date-picker>
   <template>
-
-<!-- -----------------------------------날씨------------------------------------------- -->
 <v-card
     width="300"
    left
@@ -142,10 +141,8 @@
         <v-list-item-subtitle >5 day / 3 hour forecast!</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
-
    <legend></legend>
-
-  <div id="openweathermap-widget-24"></div>
+  <div >
     <v-card-text >
       <v-row align="center">
         <v-col class="display-3" cols="6">
@@ -179,7 +176,7 @@
       src="@/assets/thermometer.png"
       ></v-img><v-list-item-title>최고온도: {{Math.ceil(maxtemp-273.15)}}&deg;c / 최저온도: {{Math.ceil(mintemp-273.15)}}&deg;c</v-list-item-title>
     </v-list-item>
-    
+
     <v-slider
       v-model="time"
       :max="leng"
@@ -189,9 +186,9 @@
       @click="timebars"
     ></v-slider>
     <v-card-subtitle>해당 시간 날씨 확인 & 선택 후 등록!</v-card-subtitle>
-    <v-dialog v-model="dialog" persistent max-width="290" >
+    <v-dialog style="margin-tp[" v-model="dialog" persistent max-width="290" >
       <template v-slot:activator="{ on }" >
-        <v-btn color="primary" style="width:150px;height:60px; float : left; margin:0 auto" dark v-on="on">등록 확인</v-btn>
+        <v-btn color="primary" style="width:150px;height:60px; float : left; margin:0 auto" dark v-on="on">구장 등록하기</v-btn>
         <v-btn class="warning" style="width:150px;height:60px; float : right; margin:0 auto" @click="cancel()">취소</v-btn>
       </template>
       <v-card color="#546E7A" >
@@ -213,9 +210,10 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+</div>
 <br />
   </v-card>
+
 </template>
 
 </div>
@@ -223,10 +221,10 @@
 </div>
 </template>
 <script>
-import {store} from '@/store'
+import { store } from '@/store'
 import axios from 'axios'
 import FutMap from '@/components/contents/futsal/FutMap.vue'
-export default{
+export default {
   components:{
     FutMap
   },
@@ -234,11 +232,15 @@ export default{
     searchWord(){
       return this.stadiumName
     },
+    arrNum(){
+      return ['1','2','3','4','5','6','7','8','9','a','b','c'][parseInt(Math.random()*12)]
+    }
   },
    data(){
       return{
-      gender : '',
-      difficulty : '',
+      context: store.state.context,
+      gender : 'male',
+      difficulty : '1',
       selectitems : [],
       selectoptions : [],
       dialog : false,
@@ -264,25 +266,19 @@ export default{
       state:store.state,
       select: [],
       textbox:'',
-      snames:[
-        '서울 경기장',
-        '부산 경기장',
-        '인천 경기장',
-        '강원 경기장 '
-      ],
       value: 0,
-        num: 0,
-        ticksLabels: [
-          '4 vs 4',
-          '5 vs 5',
-          '6 vs 6',
-        ],
-        leng:'',
-        price:'',
-        remain:''
+      num: 0,
+      ticksLabels: [
+        '4 vs 4',
+        '5 vs 5',
+        '6 vs 6',
+      ],
+      leng:'',
+      price:'10000원',
+      remain:'',
+      fnc: store.state.futsal.fnc,
       }
-  },
-// -----------------------------------메소드-------------------------------------------
+    },
    methods:{
     bringWeather(){
       let url = `http://api.openweathermap.org/data/2.5/forecast?lat=${this.searchResult.y}&lon=${this.searchResult.x}&APPID=cd9a51369c3fc19f9fb85b2f2508b5d5`
@@ -292,7 +288,7 @@ export default{
         this.adata = res.data
         this.city = this.adata.city.name
         this.adds()
-      })
+      }).catch(()=> alert('날짜를 조정해주세요'))
     },
     setStadium(stadiumName){
       this.timebar = []
@@ -322,52 +318,46 @@ export default{
       }
       this.imgUrl = `http://openweathermap.org/img/wn/${this.img}@2x.png`
     },
-      register(){
+    register(){
+      if(this.city == ''){
+        alert('구장을 선택해주세요')
+      }else{
         this.dialog = false
-         alert('등록한 경기:  '+this.stadiumName
-         +'\n등록한 시간: '+this.timebar[this.temptime][this.time].dt*1000
-         +'\n등록한 관리자: '+this.state.person.name
-         +'\n경기 비용: '+this.price
-         +'\n경기 인원: '+parseInt(this.num)+4
-         +'\n구장 특이사항: '+this.textbox
-         )
-        let url = `${this.context}/register`
-        let data =  {
+      let url = `${this.context}/futsal/register`
+      this.selectitems.push('size')
+      let data =  {
         stadiumname : this.stadiumName,
         time : this.timebar[this.temptime][this.time].dt*1000,
         stadiumtel : this.searchResult.phone,
         stadiumaddr : this.searchResult.address_name,
-        adminname : this.store.person.name,
-        num : this.num,
+        adminname : store.state.person.name,
+        num : this.num + 4,
+        shoes : 'shoes1',
+        stadiumimg : `${this.arrNum}1,${this.arrNum}2,${this.arrNum}3`,
+        remain : (this.num + 4) * 2 + 4,
         gender : this.gender,
         difficulty : this.difficulty,
-        stadiumfacility : this.selectitems.join(","),
-        }
-        let headers= {
-              'authorization': 'JWT fefege..',
-              'Accept' : 'application/json',
-              'Content-Type': 'application/json'
-        }
+        stadiumfacility : 
+          ['size','shower','park','shoes','wear'].map(i=>
+            this.selectitems.includes(i) ? `${i}1` : `${i}0`
+          ).join()
+      }
+      let headers= {
+        'authorization': 'JWT fefege..',
+        'Accept' : 'application/json',
+        'Content-Type': 'application/json'
+      }
       axios
       .post(url, data, headers)
-      .then(()=>{
-        //     if(res.data.result === "SUCCESS"){
-        //         store.state.person = res.data.person
-        //         if(this.state.person.role != 'student'){
-        //             this.state.authCheck = true
-        //         }else{
-        //             this.state.authCheck = false
-        //         }
-        //         this.dialog=false
-        //     }else{
-        //         alert(`로그인 실패`)
-        //         this.$router.go({path: '/login'})
-        //     }
-        //  this.result = res.data
+      .then(res=>{
+        alert(res.data ? '등록 성공' : '등록 실패')
+        this.$router.push({path:'/futsal'})
       })
       .catch(e=>{
-         alert('register axios fail'+e)
+         alert('방 생성 실패 error code=>'+e)
       })
+      }
+      
     },
       cancel(){
          alert('취소 버튼 ')
@@ -401,15 +391,24 @@ export default{
       this.show(this.temptime,this.time)
       this.timebar[this.temptime,this.time]; 
       this.labels = []
-      for(let i=0;i<40;i++){
+      this.timebar[this.temptime].map(i=>{    
+          this.labels.push(this.$moment(i.dt*1000).format('H'))
+      })
+      
+
+      /* for(let i=0;i<40;i++){
         this.labels.push(this.$moment(this.timebar[this.temptime][i].dt*1000).format('H'))
-      }
+      } */
       // for(let i=parseInt(this.bdata[4]);i<40 ;i++){
       //   this.labels.push(this.$moment(this.timebar[4][i].dt*1000).format('H'))
       // }
       
     },
-    
+    allowedDates(val){
+      let nowDate = this.fnc.utc(Date.now())
+      let valDate = this.fnc.utc(Date.parse(val))
+      return nowDate <= valDate && valDate <= (nowDate + 3600*1000*24*5)
+    }
   },
 }
 </script>

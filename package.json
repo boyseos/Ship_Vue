@@ -5,7 +5,10 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "init": "yarn add vue-burger-menu",
+    "mbuild": "vue-cli-service build --mode development",
+    "deploy": "yarn build && aws s3 sync ./dist s3://shipteamdb3"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -24,7 +27,6 @@
     "vue-kakao-login": "^1.0.5",
     "vue-moment": "^4.1.0",
     "vue-momentjs": "^0.1.2",
-    "vue-naver-maps": "^0.11.10",
     "vue-router": "^3.1.5",
     "vue-socket.io-extended": "^4.0.1",
     "vuetify": "^2.1.0",

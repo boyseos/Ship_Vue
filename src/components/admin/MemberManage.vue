@@ -1,10 +1,10 @@
 <template>
   <div style="margin:10px;">
-  <div class="text-center" style="">
+  <div class="text-center">
   </div>
    <v-card >
     <v-card-title style="padding-left:250px;color:black;background-color:#B0BEC5">
-    <div><h2 style="font-weight:bold;">회원 목록 관리</h2></div>
+    <div><h2 style="font-weight:bold;">회원 목록</h2></div>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -19,8 +19,7 @@
       :items="lists"
       :search="search"
       :page.sync="page"
-      :items-per-page="5"
-      hide-default-footer
+      :items-per-page="20"
       class="elevation-1"
       @page-count="pageCount = $event"
     >
@@ -53,10 +52,11 @@
 </template>
 <script>
 import axios from 'axios'
+import { store } from '../../store'
 export default {
   created(){
     axios
-         .get(`/customermanage`)
+         .get(`${this.context}/customermanage`)
          .then(res =>{
             this.lists = res.data
             for(let i=0; i<this.lists.length;i++){
@@ -71,11 +71,11 @@ export default {
    data(){
       return{
         gender:[],
-    context : 'http://localhost:8080',
+    context : store.state.context,
     fixedHeader: true,
     page: 1,
     pageCount: 0,
-    itemsPerPage: 5,
+    itemsPerPage: 10,
       value:1,
     lists: [],
     black:false,
@@ -88,17 +88,12 @@ export default {
             value: 'personseq',
           },
           { text: '아이디', value: 'userid' },
-          { text: '비밀번호', value: 'passwd' },
           { text: '이름', value: 'name' },
           { text: '연락처', value: 'tel' },
           { text: '포인트', value: 'point' },
           { text: '나이', value: 'age' },
           { text: '성별', value: 'male'},
-          { text: '관심사', value: 'interest' },
           { text: '이메일', value: 'email' },
-          { text: '롤블랙', value: 'lolblack' },
-          { text: '구분', value: 'job' },
-          
         ],
       }
    },

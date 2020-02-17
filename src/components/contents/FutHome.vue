@@ -1,9 +1,9 @@
 <template>
 <div>
-    <!-- :propLocation="location" -->
   <fut-map v-if="mapTogle" :style="`height: ${height[0]}vh; width:100%;`"
     :propSearchWord="`${stadiumName} 풋살 경기장`"
-    :propLocation="location"
+    :propLocation="location" :propRightClick="true"
+    :propRoadView="true"
     @sendStadiumName="setStadium"></fut-map>
   <fut-head v-else :style="`height: ${height[0]}vh`"
     :propImg="headImg" class="table"></fut-head>
@@ -15,7 +15,6 @@
     :propTime="time" :propStadium="stadiumName" :propTable="fnc.matchFilter(time,stadiumName,table)"></fut-reservation-table>
 </div>
 </template>
-
 <script>
 import FutMap from './futsal/FutMap'
 import FutHead from './futsal/FutHead'
@@ -28,6 +27,7 @@ export default {
   components:{FutHead,FutSearchBar,FutReservation,FutReservationTable,FutMap},
   data(){
     return{
+      context:store.state.context,
       fnc: store.state.futsal.fnc,
       headImg: [
         'https://blog.hmgjournal.com/images/contents/article/20161214-Reissue-night-football-03.jpg',
@@ -39,15 +39,14 @@ export default {
       mapTogle: false,
       time : Date.now(),
       table : [],
-      height:[40,5,7],
+      height:[50,5,7],
     }
   },
   created(){
     let table = []
-    axios.get(`/futsal/`)
+    axios.get(`${this.context}/futsal/`)
       .then(res => {
         table = res.data
-        
     }).catch(e => {
       alert(`axios fail ${e} 랜덤데이터 대체`)
       const ranAddr = () => '어디어디 어디 주소 어디어디 어디 길'
@@ -60,12 +59,12 @@ export default {
       const ranfacility = () => 'size0,shower0,park0,shoes0,wear0'
       const remain = () => parseInt(Math.random()*12)
       table = Array.from({length : 200},(_,i) => ({
-        futsalmatchseq: i,
+        futsalseq: i,
         time: rantime(Date.now()), stadiumname: ranName(),
         stadiumaddr: ranAddr(), stadiumtel: ranTel(),
         num : rannum(), gender: rangender(),difficulty: ranrating(),
         shoes: 'shoes0', stadiumfacility: ranfacility(),
-        stadiumimg: '1,2,3', remain: remain(), adminname: '펭수'
+        stadiumimg: '11,12,13', remain: remain(), adminname: '펭수'
       }))
     }).finally(()=>{
       table.map(x =>{
@@ -87,12 +86,12 @@ export default {
     },
     setStadium(stadiumName){
       this.stadiumName = stadiumName.place_name ? stadiumName.place_name : stadiumName
-      this.mapTogle = this.stadiumName==='' ? false : true
+      this.mapTogle = this.stadiumName == '' ? false : true
     },
     setGps(location){
       this.location = {lat: location.lat,lng: location.lng}
       this.mapTogle = true
-    }
+    },
   }
 }
 </script>
@@ -100,5 +99,4 @@ export default {
 .table{
 	padding: 3px;
 }
-
 </style>
