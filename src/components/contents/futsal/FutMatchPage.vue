@@ -11,7 +11,7 @@
     </h1></v-card-title>
     <v-card-subtitle>{{selectMatch.stadiumaddr}}<br/>{{fnc.timeToDateWeek(selectMatch.time)}}</v-card-subtitle>
     <v-card>
-      <v-chip outlined @click="fnc.linkCopy($route.fullPath)">주소복사하기</v-chip>
+      <v-chip outlined @click="fnc.linkCopy(window.location.href)">주소복사하기</v-chip>
       <v-chip outlined @click="viewTogle()">지도보기</v-chip>
     </v-card>
     <v-card-text outlined><h5>{{moveResult}}</h5></v-card-text>
@@ -62,7 +62,7 @@
         <v-card-title>매니저  : {{selectMatch.adminname}}</v-card-title>
         <v-card-subtitle>한분한분 같이 웃고 즐기며 소통하는 매니저 {{selectMatch.adminname}}입니다. 
                 매 경기 안 다치고 소중한 시간 재미있게 즐길수 있게 최선을 다하겠습니다. 
-                같이 플랩으로 오세요!</v-card-subtitle>
+                같이 두게더로 오세요!</v-card-subtitle>
       </div>
     </div>
   </v-card>
@@ -157,6 +157,9 @@ export default {
     }
   },
   computed: {
+    window(){
+      return window
+    },
     con(){
       return window.console
     },

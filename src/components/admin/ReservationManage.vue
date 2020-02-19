@@ -152,7 +152,7 @@ export default {
           }
           alert(res ? '경기결과 입력성공' : '경기결과 입력실패')
           if(this.opend == true){
-            if(this.blackreason==''){
+            if(this.blackreason=='' || this.blackreason == undefined){
               this.opend = false
               
             }else{

@@ -7,7 +7,7 @@
 					<li><a href="#aboutme">인사 소개</a></li>
 					<li><a href="#skills"><span>전문 </span>기술</a></li>
 					<li @click="home()"><a>프로<span>젝트</span></a></li>
-					<li><a href="https://docs.google.com/presentation/d/1o5tHUwNwtWDlnr3Zt-xLRiScTJ71kZAEodrei25sxRo/edit">PPT</a></li>
+					<li><a href="https://docs.google.com/presentation/d/1Z02bOiyKiGD-ngdJmhSTTQO9qPaOInGDFFr2ckL8HQQ/edit?usp=sharing">PPT</a></li>
 					<li><a href="#contact">연락처</a></li>
 				</ul>
 			</nav>
@@ -23,22 +23,22 @@
       </div>
 
       <div class="row section-content">
-        <div class="col-1-3" style="text-align: center;">
-          <img alt="접니다!" style="height: 400px;" src="@/assets/hsc.jpg">
+        <div class="col-1-4" style="text-align: center;">
+          <img alt="접니다!" style="height: 300px;" src="http://shpteamdb7.s3-website.ap-northeast-2.amazonaws.com/me.jpg">
         </div>
         <div class="col-1-3">
-          <p>안녕하세요? 홍성철입니다!</p>
+          <p>안녕하세요? 서정욱 입니다!</p>
           <p>저는 훌륭하고 멋진 소프트웨어 개발을 즐겨하는 사람입니다. 포트폴리오도 만들었으니 <a @click="home()">여기를 누르시거나</a> 페이지 아래쪽에서 구경해 보세요! 도움이 필요하세요? 저하고 이야기해 보시겠어요? <a href="#contact">이메일</a>로 연락해 주세요.</p>
         </div>
-        <!-- <div class="col-1-3">
-          <h4>개인 관심사</h4>
-          
-          <p><a href="#skills">프로그래밍</a>을 하지 않을 때는 다음과 같은 것으로 소일하며 즐거운 생활을 하고 있답니다.</p>
+        <div class="col-1-3" style="margin-left: 20px;">
+			<h4>개인 관심사</h4>
+			<p><a href="#skills">프로그래밍</a>을 하지 않을 때는 다음과 같은 것으로 소일하며 즐거운 생활을 하고 있답니다.</p>
 			<ul>
-				<li v-for="(item,index) of user.personal" :key="index">{{item}}</li>
+				<li v-for="(item,index) of personal" :key="index">{{item}}</li>
 			</ul>					
-		</div> -->
+		</div>
       </div>
+		<!-- <iframe src="ddd" frameborder="0"></iframe> -->
     </div>
   </section>
   <section id="skills" class="section-alt">
@@ -52,25 +52,25 @@
 
       <div class="row section-content">
         <div class="skill-container" style="width:100%">
-          <div class="col-1-5 skill">
+          <div class="col-1-4 skill">
             <h4>JAVA8</h4>
           </div>
-          <div class="col-1-5 skill">
+          <div class="col-1-4 skill">
             <h4>JAVASCRIPT</h4>
           </div>
-          <div class="col-1-5 skill">
+          <div class="col-1-4 skill">
             <h4>HTML5</h4>
           </div>
-          <div class="col-1-5 skill">
+          <div class="col-1-4 skill">
             <h4>MariaDB</h4>
           </div>
-          <div class="col-1-6 skill">
+          <div class="col-1-3 skill">
             <h4>JAVA 8</h4>
           </div>
-          <div class="col-1-6 skill">
+          <div class="col-1-3 skill">
             <h4>SPRING-BOOT</h4>
           </div>
-		<div class="col-1-6 skill">
+		<div class="col-1-3 skill">
             <h4>ANSI-SQL</h4>
           </div>
         </div>
@@ -108,10 +108,10 @@
         <div class="col-2-3 col-wrap centered text-center">
           <div class="row">
             <div class="col-full" style="margin-bottom: 25px;">
-				홍성철 <br><br>
-				<a href="https://github.com/hongsc1991">Git address</a><br>
-			Phone Number : 010-6202-4102 <br>
-              Email :  hongsc1991@naver.com
+				서정욱 <br><br>
+				<a href="https://github.com/boyseos">Git address</a><br>
+			Phone Number : 010-8499-2070 <br>
+              Email :  boyseos@naver.com
             </div>
           </div>
         </div>
@@ -129,7 +129,7 @@ export default {
 			personal:[
 				'유투브 래춘씨생존기를 줄겨봅니다.',
 				'요즘하는게임은 위쳐3예요',
-				'Go랭을 강의를 볼 생각입니다.',
+				'코틀린을 배워볼 생각입니다.',
 			],
 		}
 	},  

@@ -169,7 +169,7 @@
               {label: '광주 지역',
               backgroundColor: '#4527A0',
               data: [this.rcounting('광주'),this.rcounting('광주')-this.rgcounting('광주'),this.rgcounting('광주')]},
-              {label: '경상 지역',
+              {label: '경남 지역',
               backgroundColor: '#8E24AA',
               data: [this.rcounting('경남'),this.rcounting('경남')-this.rgcounting('경남'),this.rgcounting('경남')]},
               {label: '대전 지역',

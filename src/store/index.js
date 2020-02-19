@@ -4,8 +4,8 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    context:'http://localhost:8080',
-    //context:'http://13.124.138.54',
+    //context:'http://localhost:8080',
+    context:'http://13.124.138.54',
     /* context:'http://localhost:8080', */
     header: {
       'authorization': 'JWT fefege..',
@@ -38,7 +38,7 @@ export const store = new Vuex.Store({
           dummy.value = val;
           dummy.select();
           document.execCommand("copy");
-          document.body.removeChild(dummy); 
+          document.body.removeChild(dummy);
         },
         utc(time){
           return (parseInt(time/3600/1000/24)*24 + (new Date(time).getHours() >= 9 ? -9 : 15))*3600*1000
